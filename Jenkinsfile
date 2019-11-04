@@ -17,6 +17,9 @@ spec:
       volumeMounts:
       - mountPath: /home/jenkins/.ssh
         name: volume-known-hosts
+      env:
+      - name: "HOME"
+        value: "/home/jenkins/agent"
     - name: hugo
       image: eclipsecbi/hugo:0.42.1
       command:
