@@ -48,14 +48,16 @@ spec:
     stages {
         stage('Checkout www repo') {
             steps {
+                sh '''
+                    if ! grep -q "^git.eclipse.org" ~/.ssh/known_hosts; then
+                      mkdir -p ~/.ssh
+                      ssh-keyscan -t rsa git.eclipse.org >> ~/.ssh/known_hosts
+                    fi
+                '''
                 dir('www') {
-                    sshagent(['git.eclipse.org-bot-ssh']) {
-                        sh '''
-                            ssh-keyscan -H git.eclipse.org >> ~/.ssh/known_hosts
-                            git clone ssh://genie.${PROJECT_NAME}@git.eclipse.org:29418/www.eclipse.org/${PROJECT_NAME}.git .
-                            git checkout ${BRANCH_NAME}
-                        '''
-                    }
+                    git branch: "${BRANCH_NAME}",
+                        url: "ssh://genie.${PROJECT_NAME}@git.eclipse.org:29418/www.eclipse.org/${PROJECT_NAME}.git",
+                        credentialsId: 'git.eclipse.org-bot-ssh'
                 }
             }
         }
