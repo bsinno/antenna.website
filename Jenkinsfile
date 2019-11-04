@@ -51,6 +51,7 @@ spec:
                 dir('www') {
                     sshagent(['git.eclipse.org-bot-ssh']) {
                         sh '''
+                            ssh-keyscan -H git.eclipse.org >> ~/.ssh/known_hosts
                             git clone ssh://genie.${PROJECT_NAME}@git.eclipse.org:29418/www.eclipse.org/${PROJECT_NAME}.git .
                             git checkout ${BRANCH_NAME}
                         '''
