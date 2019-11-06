@@ -52,7 +52,10 @@ spec:
                     sshagent(['git.eclipse.org-bot-ssh']) {
                         sh '''
                             echo "$(ssh-keygen -H -F git.eclipse.org)"
-                            ssh -o StrictHostKeyChecking=no -p 29418 -vvv genie.antenna@git.eclipse.org
+                            ssh-keygen -R git.eclipse.org
+                            echo "$(ssh-keygen -H -F git.eclipse.org)"
+                            ssh-keyscan -H git.eclipse.org >> ${JENKINS_HOME}/.ssh/known_hosts'
+
                             git clone ssh://genie.${PROJECT_NAME}@git.eclipse.org:29418/www.eclipse.org/${PROJECT_NAME}.git .
                             git checkout ${BRANCH_NAME}
                         '''
