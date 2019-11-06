@@ -50,8 +50,12 @@ spec:
             steps {
                 sh '''
                     if ! grep -q "^git.eclipse.org" ~/.ssh/known_hosts; then
+                      echo "adding host to known hosts"
                       mkdir -p ~/.ssh
                       ssh-keyscan -t rsa git.eclipse.org >> ~/.ssh/known_hosts
+                      ssh -p 29418 -vvv genie.antenna@git.eclipse.org
+                    else
+                      echo "not adding host because already contained"
                     fi
                 '''
                 dir('www') {
